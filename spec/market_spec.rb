@@ -54,4 +54,57 @@ RSpec.describe Market do
       expect(market1.vendors_that_sell(item4)).to eq([vendor2])
     end
   end
+
+  describe 'items and the market' do
+    xit 'the market can sort items' do
+      market1.add_vendor(vendor1)
+      market1.add_vendor(vendor2)
+      market1.add_vendor(vendor3)
+
+      vendor1.stock(item1, 35)
+      vendor1.stock(item2, 7)
+      vendor2.stock(item4, 50)
+      vendor2.stock(item3, 25)
+      vendor3.stock(item1, 65)
+
+      expect(market1.sorted_item_list).to eq(["peach"])
+    end
+
+    xit 'the market can show an if an item is overstocked' do
+      market1.add_vendor(vendor1)
+      market1.add_vendor(vendor2)
+      market1.add_vendor(vendor3)
+
+      vendor1.stock(item1, 35)
+      vendor1.stock(item2, 7)
+      vendor2.stock(item4, 50)
+      vendor2.stock(item3, 25)
+      vendor3.stock(item1, 65)
+      vendor3.stock(item4, 10)
+
+      expect(market1.overstocked_items).to eq([item1])
+    end
+
+    xit 'the vendor can show a total inventory' do
+      market1.add_vendor(vendor1)
+      market1.add_vendor(vendor2)
+      market1.add_vendor(vendor3)
+
+      vendor1.stock(item1, 35)
+      vendor1.stock(item2, 7)
+      vendor2.stock(item4, 50)
+      vendor2.stock(item3, 25)
+      vendor3.stock(item1, 65)
+
+      expected = {
+        :item1 => {quantity: 100, vendors: [vendor1, vendor3]},
+        :item3 => {quantity: 7, vendors: [vendor2]},
+        :item2 => {quantity: 25, vendors: [vendor2]},
+        :item4 => {quantity:50, vendors: [vendor2] }
+      }
+
+      expect(market.total_inventory).to eq(expected)
+
+    end
+  end
 end
