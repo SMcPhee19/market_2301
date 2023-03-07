@@ -15,10 +15,20 @@ RSpec.describe Vendor do
   describe '#it exists with attributes' do
     it 'the vendor exists' do
       expect(vendor1).to be_a Vendor
+      expect(vendor2).to be_a Vendor
+      expect(vendor3).to be_a Vendor
+    end
+
+    it 'the vendor has a name' do
+      expect(vendor1.name).to eq("Rocky Mountain Fresh")
+      expect(vendor2.name).to eq("Ba-Nom-a-Nom")
+      expect(vendor3.name).to eq("Palisade Peach Shack")
     end
 
     it 'the vendor starts with an empty inventory' do
       expect(vendor1.inventory).to eq({})
+      expect(vendor2.inventory).to eq({})
+      expect(vendor3.inventory).to eq({})
     end
   end
 

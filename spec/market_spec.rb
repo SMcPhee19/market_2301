@@ -55,8 +55,31 @@ RSpec.describe Market do
     end
   end
 
-  describe 'items and the market' do
-    xit 'the market can sort items' do
+  describe '#items and the market' do
+    it 'the vendor can show a total inventory' do
+      market1.add_vendor(vendor1)
+      market1.add_vendor(vendor2)
+      market1.add_vendor(vendor3)
+
+      vendor1.stock(item1, 45)
+      vendor1.stock(item2, 10)
+      vendor2.stock(item4, 50)
+      vendor2.stock(item3, 25)
+      vendor3.stock(item1, 65)
+      vendor3.stock(item4, 10)
+
+      expected = {
+        item1 => {quantity: 110, vendors: [vendor1, vendor3]},
+        item2 => {quantity: 10, vendors: [vendor1]},
+        item3 => {quantity: 25, vendors: [vendor2]},
+        item4 => {quantity: 60, vendors: [vendor2, vendor3] }
+      }
+
+      expect(market1.total_inventory).to eq(expected)
+
+    end
+
+    it 'the market can sort items' do
       market1.add_vendor(vendor1)
       market1.add_vendor(vendor2)
       market1.add_vendor(vendor3)
@@ -67,10 +90,10 @@ RSpec.describe Market do
       vendor2.stock(item3, 25)
       vendor3.stock(item1, 65)
 
-      expect(market1.sorted_item_list).to eq(["peach"])
+      expect(market1.sorted_item_list).to eq(["Banana Nice Cream", "Peach", "Peach-Raspberry Nice Cream", "Tomato"])
     end
 
-    xit 'the market can show an if an item is overstocked' do
+    it 'the market can show an if an item is overstocked' do
       market1.add_vendor(vendor1)
       market1.add_vendor(vendor2)
       market1.add_vendor(vendor3)
@@ -82,29 +105,7 @@ RSpec.describe Market do
       vendor3.stock(item1, 65)
       vendor3.stock(item4, 10)
 
-      expect(market1.overstocked_items).to eq([item1])
-    end
-
-    xit 'the vendor can show a total inventory' do
-      market1.add_vendor(vendor1)
-      market1.add_vendor(vendor2)
-      market1.add_vendor(vendor3)
-
-      vendor1.stock(item1, 35)
-      vendor1.stock(item2, 7)
-      vendor2.stock(item4, 50)
-      vendor2.stock(item3, 25)
-      vendor3.stock(item1, 65)
-
-      expected = {
-        :item1 => {quantity: 100, vendors: [vendor1, vendor3]},
-        :item3 => {quantity: 7, vendors: [vendor2]},
-        :item2 => {quantity: 25, vendors: [vendor2]},
-        :item4 => {quantity:50, vendors: [vendor2] }
-      }
-
-      expect(market.total_inventory).to eq(expected)
-
+      expect(market1.overstocked_items).to eq([item1, item4])
     end
   end
 end
